@@ -1,7 +1,8 @@
 {
   "name": "ngx-ribbon",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An Angular library for making corner ribbons",
+  "homepage": "https://github.com/apappas1129/ngx-ribbon#readme",
   "keywords": [
     "ng-ribbon",
     "ngx-ribbon",
