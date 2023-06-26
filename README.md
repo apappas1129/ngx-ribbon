@@ -5,7 +5,7 @@ An [Angular](https://angular.io/) UI Component library for corner ribbons.
 ## Installation
 
 ```bash
-npm install --save <TODO:publish library>
+npm install --save ngx-ribbon
 ```
 
 ## Usage

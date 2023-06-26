@@ -1,6 +1,26 @@
 {
   "name": "ngx-ribbon",
   "version": "0.0.1",
+  "description": "An Angular library for making corner ribbons",
+  "keywords": [
+    "ng-ribbon",
+    "ngx-ribbon",
+    "ng ribbon",
+    "ng ribbon component",
+    "angular ribbon",
+    "angular ribbon component",
+    "ribbon",
+    "corner ribbon"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apappas1129/ngx-ribbon"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Alexandros Pappas",
+    "url": "https://github.com/apappas1129"
+  },
   "peerDependencies": {
     "@angular/common": "^15.0.0",
     "@angular/core": "^15.0.0"
