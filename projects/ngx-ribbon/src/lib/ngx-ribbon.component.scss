@@ -1,0 +1,97 @@
+@use "sass:math";
+
+$ribbon-base-color: #e74c3c; // base color of the ribbon
+$ribbon-darkened-color: darken($ribbon-base-color, 10%); // darkened base color for the folded part
+$ribbon-label-color: #fff;
+
+$main-width: 150px; // ribbon is wrapped by a square
+$ribbon-width: $main-width * 1.5; // 225px
+$ribbon-underside-length: math.div($main-width, 30); // 5px, How much of the underside of the folded ribbon is exposed.
+$ribbon-padding: math.div($main-width, 10); // ~15px
+$label-min-height: $main-width * 0.12; // ~18px
+$offset: $ribbon-underside-length * -2; // ~-10px
+
+.ribbon {
+  width: $main-width;
+  height: $main-width;
+  overflow: hidden;
+  position: absolute;
+  border-color: $ribbon-darkened-color;
+
+  &::before,
+  &::after {
+    position: absolute;
+    // z-index: -1;
+    content: "";
+    display: block;
+    border-color: inherit;
+    border-width: $ribbon-underside-length;
+    border-style: solid;
+  }
+
+  .ribbon-label {
+    position: absolute;
+    display: block;
+    width: $ribbon-width;
+    padding: $ribbon-padding 0;
+    background-color: $ribbon-base-color;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    color: $ribbon-label-color;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    text-align: center;
+    line-height: $label-min-height !important; // lock in so the ribbon's thickness is unaffected by the label's font-size
+    font-size: 1.25em;
+
+    span {
+      display: block;
+      min-height: $label-min-height; // prevents ribbon from braking when label is blank
+    }
+  }
+}
+
+@mixin ribbon-position($positionY, $positionX, $angle) {
+  .ribbon-#{$positionY}-#{$positionX} {
+    #{$positionY}: $offset; // top or bottom
+    #{$positionX}: $offset; // left or right
+    // Anchor to correct position for when transform scale is applied.
+    transform-origin: calc(#{if($positionX == "left", "0% + ", "100% - ")} 2 * #{$ribbon-underside-length})
+      calc(#{if($positionY == "top", "0% + ", "100% - ")} 2 * #{$ribbon-underside-length});
+
+    // #region undersides of the folded ribbon
+    &::before,
+    &::after {
+      border-#{$positionY}-color: transparent;
+      border-#{$positionX}-color: transparent;
+    }
+
+    &::before {
+      #{$positionY}: 0; // top or bottom
+      #{if($positionX == 'left', 'right', 'left')}: 0; // anchor on the opposite side
+    }
+
+    &::after {
+      #{if($positionY == 'top', 'bottom', 'top')}: 0; // anchor on the opposite side
+      #{$positionX}: 0; // left or right
+    }
+    // #endregion
+
+    .ribbon-label {
+      #{if($positionX == 'left', 'right', 'left')}: -25px; // offset on opposite side
+      #{$positionY}: 30px; // top or bottom
+      transform: rotate(#{$angle}deg);
+
+      // Corrective centering of label for top-right and bottom-left ribbon
+      @if ($positionY == "top" and $positionX == "right") or ($positionY == "bottom" and $positionX == "left") {
+        span {
+          padding-left: 1.5ch; // add padding equivalent to 150% width of "0" in current font-size
+        }
+      }
+    }
+  }
+}
+
+@include ribbon-position(top, left, -45);
+@include ribbon-position(top, right, 45);
+@include ribbon-position(bottom, left, 225);
+@include ribbon-position(bottom, right, -225);
